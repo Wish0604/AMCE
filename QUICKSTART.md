@@ -1,485 +1,140 @@
-﻿# ðŸš€ AMCE Quick Start Guide
+# AMCE Quickstart
+
+Get the AMCE Analyzer running locally (backend + frontend).
+
+---
 
 ## Prerequisites
 
-- Node.js 16+
-- npm or yarn
-- Git
-- Google Gemini API Key ([Get free API key](https://ai.google.dev/))
+- **Node.js** 16+ (recommended: latest LTS)
+- **npm** (or yarn/pnpm)
+- **Git**
+- **Google Gemini API key** — get one from <https://ai.google.dev/>
 
 ---
 
-## ðŸ“¥ Installation & Setup
+## 1. Clone the Repository
 
-### Step 1: Navigate to Project
 ```bash
-cd c:\Projects\AMCE
+git clone https://github.com/Wish0604/AMCE.git
+cd AMCE
 ```
 
-### Step 2: Backend Setup
+---
+
+## 2. Backend Setup
 
 ```bash
 cd backend
-
-# Install dependencies
 npm install
+```
 
-# Create .env file with your API key
-echo GEMINI_API_KEY=your-api-key-here > .env
-echo GEMINI_MODEL=gemini-2.5-flash >> .env
-echo PORT=5000 >> .env
+Create `backend/.env`:
 
-# Start backend server
+```env
+GEMINI_API_KEY=your_api_key_here
+GEMINI_MODEL=gemini-2.5-flash
+PORT=5000
+```
+
+Start the backend:
+
+```bash
 npm start
 ```
 
-âœ… Backend will run on `http://localhost:5000` (or auto-discover to 5001-5005 if ports are busy)
+The backend will be available at `http://localhost:5000` (auto-discovers ports 5001-5005 if 5000 is busy; check terminal output for the actual port).
 
-### Step 3: Frontend Setup (New Terminal)
+---
+
+## 3. Frontend Setup (new terminal)
 
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Start dev server
 npm run dev
 ```
 
-âœ… Frontend will run on `http://localhost:5173` (or next available port like 5174)
+The frontend typically runs at `http://localhost:5173`.
 
 ---
 
-## ðŸŽ® Usage
+## 4. Using the App
 
-### 1. Open Application
-Navigate to the frontend URL (e.g., `http://localhost:5173`)
-
-### 2. Select Language (Optional)
-Choose from:
-- ðŸ‡ºðŸ‡¸ English
-- ðŸ‡ªðŸ‡¸ Spanish
-- ðŸ‡«ðŸ‡· French
-- ðŸ‡©ðŸ‡ª German
-- ðŸ‡¨ðŸ‡³ Chinese
-- ðŸ‡®ðŸ‡³ Hindi
-
-### 3. Input Your Answer
-Choose ONE method:
-
-**Option A: Type**
-- Click in the "Student Answer" field
-- Type your response
-
-**Option B: Speak** ðŸŽ¤
-- Click "ðŸŽ¤ Speak (Answer)" button
-- Allow microphone permission when prompted
-- Speak clearly
-- Watch real-time transcript appear
-- Speech will auto-populate the answer field
-
-**Option C: Upload Image** ðŸ“¸
-- Click "ðŸ“¸ Upload Image" button
-- Select an image (PNG, JPG, etc.)
-- OCR will extract text from the image
-
-### 4. Analyze
-- Click "âš¡ Analyze" button
-- Wait for AI analysis (1-5 seconds)
-
-### 5. Review Feedback
-- See misconception type (Conceptual, Procedural, Overgeneralization, Partial)
-- Read explanation
-- Check confidence score
-
-### 6. Try Challenge (Optional)
-If your answer was incorrect:
-- Click "â†’ Start 3-Question Challenge"
-- Answer 3 AI-generated multiple-choice questions
-- Get feedback on each answer
-- Track your progress on the dashboard
-
-### 7. Track Progress
-View on the right sidebar:
-- Total attempts
-- Accuracy percentage
-- Weak concept areas
-- Quiz attempts and performance
-- Misconceptions improved count
+1. Open the frontend URL in your browser.
+2. Enter a **question** and a **student answer** using one of:
+   - **Text**: type directly into the field.
+   - **Voice**: click the microphone button (allow microphone access when prompted); supports English, Hindi, and Marathi.
+   - **Image**: upload a file — OCR extracts the text (may be simulated depending on implementation).
+3. Click **Analyze**.
+4. Review the result:
+   - misconception type (Conceptual, Procedural, Overgeneralization, Partial)
+   - explanation and confidence score
+5. Optionally start the **3-question challenge** to reinforce learning.
 
 ---
 
-## ðŸ§ª Testing Voice Input
+## Testing Voice Input
 
-### Test Basic Voice
-1. Click "ðŸŽ¤ Speak (Answer)"
-2. **Allow microphone permission** (browser will prompt)
-3. Speak clearly: *"Because heavier objects fall faster"*
-4. See transcript appear in real-time
-5. Click "âš¡ Analyze"
+- Use a Chromium-based browser (Chrome/Edge) for best Web Speech API support.
+- Ensure microphone permissions are enabled for the site.
 
-### Test Multi-Language (Hindi example)
-1. Select "ðŸ‡ªðŸ‡¸ Spanish" from language dropdown
-2. Click "ðŸŽ¤ Speak (Answer)"
-3. Speak in Spanish: *"Porque los objetos mÃ¡s pesados caen mÃ¡s rÃ¡pido"*
-4. Click "âš¡ Analyze"
-5. Gemini will analyze with Spanish language context
+Common issues:
 
-### Test Question Voice Input
-1. Click "ðŸŽ¤ Speak (Question)"
-2. Speak your question: *"Why do magnets attract?"*
-3. Question field will populate
-4. Proceed to answer input
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `not-allowed` | Microphone permission denied | Enable in browser site settings and reload |
+| Voice not supported | Browser lacks Web Speech API | Switch to Chrome or Edge |
 
 ---
 
-## ðŸ› Troubleshooting
+## Troubleshooting
 
-### "Error: not-allowed" Voice Message
-**Problem**: Microphone permission denied
-**Solution**:
-1. Check browser settings â†’ Site Settings â†’ Microphone
-2. Allow `localhost:5173` (or your port)
-3. Reload page
-4. Try voice button again
+### Frontend can't reach backend
 
-### "Voice not supported in this browser"
-**Problem**: Using older browser
-**Solution**: Use Chrome, Firefox, or Safari (all support Web Speech API)
+- Confirm the backend is running and check the port printed in the backend terminal.
+- If the frontend uses `VITE_API_URL`, set it to the correct backend address (then restart `npm run dev`):
 
-### Backend Connection Failed
-**Problem**: Frontend can't reach backend
-**Solution**:
-1. Ensure backend is running on port 5002 (or note the port in terminal)
-2. Check that ports 5000-5005 aren't all blocked
-3. Frontend auto-discovers ports; just reload page
+  ```env
+  VITE_API_URL=http://localhost:5000/api
+  ```
 
-### Gemini API Error
-**Problem**: "LLM unavailable (403)"
-**Solution**:
-1. Verify API key in `backend/.env`
-2. Check that API key has Gemini API enabled
-3. Verify quota limits not exceeded at [Google Cloud Console](https://console.cloud.google.com/)
+### Gemini API errors (403 / quota / invalid key)
+
+- Verify `GEMINI_API_KEY` in `backend/.env`.
+- Confirm the Gemini API is enabled for your key/project.
+- Check quota and limits in your [Google Cloud / AI console](https://console.cloud.google.com/).
+- Without a valid key the system falls back to pattern-based rules.
+
+### Backend won't start
+
+Check whether another process is using port 5000:
+
+```bash
+# macOS / Linux
+lsof -i :5000
+
+# Windows
+netstat -ano | findstr :5000
+```
+
+Terminate the conflicting process or set a different `PORT` in `backend/.env`.
 
 ---
 
-## ðŸ“¦ Production Build
+## Production Build (Frontend)
 
-### Build Frontend
 ```bash
 cd frontend
 npm run build
 ```
-Creates optimized production bundle in `frontend/dist/`
 
-### Serve Production
-```bash
-# Option 1: Use backend to serve (add routing)
-# Modified backend can serve dist/ files
-
-# Option 2: Use simple HTTP server
-cd frontend
-npx serve dist
-```
+This produces an optimised bundle in `frontend/dist/`.
 
 ---
 
-## ðŸŽ“ Features Summary
-
-| Feature | Status | Input | Supported |
-|---------|--------|-------|-----------|
-| Text Analysis | âœ… Active | Type | Yes |
-| Voice Input | âœ… Active | Microphone | 6 languages |
-| Image Upload | âœ… Active | File | PNG, JPG, etc. |
-| Multi-Language | âœ… Active | Selector | 6 languages |
-| Quiz Challenges | âœ… Active | Multiple-choice | Auto-generated by AI |
-| Dashboard | âœ… Active | Real-time | Metrics, history |
-| Feedback | âœ… Active | AI-generated | Contextual |
-
----
-
-## ðŸ“š Learn More
-
-- [Full README](README.md) - Complete project documentation
-- [Architecture](README.md#-architecture-pipeline) - System design
-- [Contributing](README.md#-contributing) - How to contribute
-
----
-
-## ðŸ’¡ Tips
-
-- **Faster analysis**: Use simple, clear answers (rule engine is 50ms vs. AI 3-5s)
-- **Better voice**: Speak clearly without background noise
-- **Multi-language**: Backend automatically adjusts Gemini's analysis based on selected language
-- **Track progress**: Answer multiple questions to see weak areas on dashboard
-- **Quiz mode**: Reinforces learning with immediate feedback
-
----
-
-**Status**: âœ… Ready to use! Start with the installation steps above.
-
-Frontend runs on: `http://localhost:5173` (Vite)
-
----
-
-## ðŸŽ¯ Using AMCE
-
-### Step-by-Step:
-
-1. **Open Browser**
-   - Navigate to `http://localhost:5173`
-   - See AMCE interface with example question/answer
-
-2. **Input Your Answer** (Choose one):
-   - **Type**: Edit the textarea directly
-   - **Speak**: Click ðŸŽ¤ button, speak your answer
-   - **Upload**: Click ðŸ“¸ button, select image with text
-
-3. **Click âš¡ Analyze**
-   - System processes your answer
-   - Shows misconception type (or âœ… if correct)
-   - Displays personalized explanation
-
-4. **Learn from Feedback**
-   - Read the explanation carefully
-   - Understand why answer was incorrect
-   - See processing method and confidence level
-
-5. **Try Follow-Up Challenge**
-   - Click "â†’ Try Challenge" button
-   - New contextual question loads
-   - Attempt again to reinforce learning
-
-6. **View Progress Dashboard**
-   - Right sidebar tracks all attempts
-   - Shows accuracy, weak areas
-   - See learning patterns over time
-
----
-
-## ðŸ§ª Testing the Workflow
-
-### Test Case 1: Overgeneralization Detection
-```
-Question: Why do objects fall?
-Answer: Because heavier objects fall faster
-Expected: Overgeneralization misconception
-Result: Explanation + follow-up question
-```
-
-### Test Case 2: Partial Answer
-```
-Question: What is photosynthesis?
-Answer: Plants use sun
-Expected: Partial answer type
-Result: Ask for more details
-```
-
-### Test Case 3: Correct Answer
-```
-Question: What is 2+2?
-Answer: Two plus two equals four
-Expected: âœ… Correct answer
-Result: Show success + offer advanced challenge
-```
-
-### Test Case 4: Voice Input
-```
-Action: Click ðŸŽ¤ Speak button
-Say: "Heavier objects fall faster"
-Result: Text appears in textarea â†’ Analyze
-```
-
-### Test Case 5: Image Upload (Simulated)
-```
-Action: Click ðŸ“¸ Upload Image
-Select: Any .jpg, .png file
-Result: Simulated OCR text â†’ Analyze
-```
-
----
-
-## ðŸ“Š Monitoring Backend
-
-### Check Backend Logs
-```bash
-# Backend started messages:
-Server running on port 5000
-
-# Analysis request example:
-Analysis Error: (if any)
-
-# Gemini API calls logged when LLM path used
-```
-
-### API Testing (cURL)
-```bash
-# Simple test
-curl -X POST http://localhost:5000/api/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "question": "Why do objects fall?",
-    "answer": "Because heavier objects fall faster"
-  }'
-
-# Response:
-{
-  "success": true,
-  "data": {
-    "misconception": "Overgeneralization",
-    "explanation": "You applied a rule too broadly...",
-    "followUpQuestion": "Now try this...",
-    "isCorrect": false,
-    "confidence": 0.85,
-    ...
-  }
-}
-```
-
----
-
-## ðŸ’¾ Data & History
-
-### View Saved History
-1. Open Browser DevTools (F12)
-2. Go to: Application â†’ Local Storage
-3. Find: `amce_analysis_history`
-4. View all your attempts in JSON format
-
-### Clear History
-1. Click ðŸ—‘ï¸ "Clear History" button 
-2. Confirm when prompted
-3. Dashboard resets to empty state
-
----
-
-## ðŸ› Troubleshooting
-
-### Issue: Backend Won't Start
-```bash
-# Check if port is in use
-netstat -ano | findstr :5000
-
-# Kill process using port 5000 (Windows)
-taskkill /PID <PID> /F
-
-# Retry npm start
-```
-
-### Issue: API Connection Failed
-```bash
-# Verify backend is running
-curl http://localhost:5000/api/analyze
-
-# Check frontend .env configuration
-cat .env
-
-# Try explicit API URL in frontend .env:
-VITE_API_URL=http://localhost:5000/api
-```
-
-### Issue: Voice Recognition Not Working
-```
-Check: Browser compatibility (Chrome, Edge, Firefox)
-Try: Allowing microphone permissions in browser
-Fix: Use different browser if still not working
-```
-
-### Issue: Gemini API Errors
-```bash
-# Check API key in .env
-cat backend/.env | grep GEMINI_API_KEY
-
-# Verify key at: https://makersuite.google.com/app/apikey
-# Test API with CURL
-
-# Without API key, system falls back to pattern-based rules
-```
-
-### Issue: OCR Upload Fails
-```
-Note: OCR is currently simulated for hackathon
-In production: Install Tesseract.js
-npm install tesseract.js
-```
-
----
-
-## ðŸ“ˆ Performance Tuning
-
-### Faster Responses
-- Pattern-based rules activated first (~50ms)
-- Only call Gemini for complex answers
-- Enable caching for repeated questions (future)
-
-### Better Accuracy
-- More comprehensive rule patterns in `ruleEngine.js`
-- Improved Gemini prompt engineering
-- Feedback service contextualization
-
----
-
-## ðŸŽ“ Learning Tips
-
-**For Students**:
-- Try multiple input methods to find what works
-- Read explanations carefully before retry
-- Attempt follow-up challenges to solidify learning
-- Track progress in dashboard to celebrate improvements
-
-**For Educators**:
-- Customize question prompts in source code
-- Adjust rule patterns for domain-specific errors
-- Add more misconception types as needed
-- Monitor student progress through history
-
----
-
-## ðŸ“š File Reference
-
-| File | Purpose |
-|------|---------|
-| `backend/app.js` | Express server setup |
-| `backend/controllers/analysisController.js` | Main request handler |
-| `backend/services/llm/geminiService.js` | AI classification |
-| `frontend/src/App.jsx` | Main React app, state mgmt |
-| `frontend/src/components/InputBox.jsx` | Answer collection & display |
-| `frontend/src/components/Dashboard.jsx` | Progress tracking |
-| `WORKFLOW_IMPLEMENTATION.md` | Complete workflow docs |
-
----
-
-## ðŸ”— Resources
-
-- **Gemini API Docs**: https://ai.google.dev/
-- **Web Speech API**: https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
-- **Tailwind CSS**: https://tailwindcss.com
-- **Vite**: https://vitejs.dev
-- **Express.js**: https://expressjs.com
-
----
-
-## âœ… Verification Checklist
-
-- [ ] Backend running on port 5000
-- [ ] Frontend accessible at localhost:5173
-- [ ] Can type answer and click Analyze
-- [ ] Receives response with misconception type
-- [ ] Can use ðŸŽ¤ voice input
-- [ ] Can upload ðŸ“¸ image
-- [ ] Follow-up challenge button works
-- [ ] Dashboard updates with each attempt
-- [ ] History saved in localStorage
-- [ ] Can clear history successfully
-
----
-
-## ðŸŽ‰ You're Ready!
-
-Start analyzing student answers and watch them improve their understanding! 
-
-**Questions?** Check the WORKFLOW_IMPLEMENTATION.md file for detailed information.
-
-**Happy Learning! ðŸš€**
-
+## Helpful Links
+
+- Full project overview: [README.md](README.md)
+- Gemini docs: <https://ai.google.dev/>
+- Web Speech API: <https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API>
