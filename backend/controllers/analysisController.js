@@ -7,34 +7,61 @@ const reinforcementService = require("../services/reinforcement/reinforcementSer
 
 exports.analyzeAnswer = async (req, res) => {
   try {
-    const { question, answer } = req.body;
+    const { question, answer, language = "en-US" } = req.body;
+    const startTime = Date.now();
+
+    if (!question || !answer) {
+      return res.status(400).json({ 
+        success: false, 
+        error: "Question and answer are required" 
+      });
+    }
 
     const cleanAnswer = preprocess(answer);
     const ruleHints = ruleEngine(cleanAnswer);
     const route = decisionRouter(ruleHints, cleanAnswer);
 
     let aiResult;
+    let isCorrect = false;
 
     if (route === "simple") {
-      aiResult = { type: ruleHints.type, explanation: "You are overgeneralizing the concept." };
+      // Rule-based detection (fast path)
+      aiResult = { 
+        type: ruleHints.type, 
+        explanation: "You are overgeneralizing the concept.",
+        confidence: ruleHints.confidence || 0.7
+      };
     } else {
-      aiResult = await geminiService(question, cleanAnswer, ruleHints);
+      // AI-based detection (slower but more accurate)
+      aiResult = await geminiService(question, cleanAnswer, ruleHints, language);
+      // Check if Gemini thinks it's correct
+      isCorrect = aiResult.isCorrect || false;
     }
 
     const feedback = feedbackService(aiResult);
-    const followUp = reinforcementService(question);
+    const followUp = await reinforcementService(question, aiResult.type);
+    const processingTime = Date.now() - startTime;
 
     res.json({
       success: true,
       data: {
         misconception: aiResult.type,
         explanation: feedback,
-        followUpQuestion: followUp
+        followUpQuestion: followUp,
+        isCorrect: isCorrect,
+        confidence: aiResult.confidence || 0.5,
+        processingMethod: route,
+        processingTimeMs: processingTime,
+        timestamp: new Date().toISOString()
       }
     });
 
   } catch (error) {
     console.error("Analysis Error:", error);
-    res.status(500).json({ error: "Server Error" });
+    res.status(500).json({ 
+      success: false,
+      error: "Server Error",
+      message: error.message 
+    });
   }
 };
