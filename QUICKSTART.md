@@ -64,7 +64,7 @@ The frontend typically runs at `http://localhost:5173`.
 1. Open the frontend URL in your browser.
 2. Enter a **question** and a **student answer** using one of:
    - **Text**: type directly into the field.
-   - **Voice**: click the microphone button (allow microphone access when prompted); supports English, Hindi, and Marathi.
+   - **Voice**: click the microphone button (allow microphone access when prompted); English only.
    - **Image**: upload a file — OCR extracts the text (may be simulated depending on implementation).
 3. Click **Analyze**.
 4. Review the result:

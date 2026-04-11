@@ -8,7 +8,7 @@ AMCE Analyzer helps identify, classify, and respond to student misconceptions. I
 
 ## Key Features
 
-- **Multi-modal input**: text, voice (browser Web Speech API with English, Hindi, and Marathi support), and image upload (OCR placeholder).
+- **Multi-modal input**: text, voice (browser Web Speech API in English), and image upload (OCR placeholder).
 - **Misconception classification**: Conceptual, Procedural, Overgeneralization, Partial.
 - **Adaptive feedback**: explanation + follow-up guidance with confidence scoring.
 - **Reinforcement mode**: optional 3-question MCQ challenge after an incorrect answer.
@@ -71,7 +71,7 @@ AMCE/
     │   │   ├── VoiceInput.jsx
     │   │   └── UploadSection.jsx
     │   ├── services/api.js
-    │   └── utils/languages.js
+    │   └── utils/
     └── vite.config.js
 ```
 
@@ -113,7 +113,6 @@ Contributions are welcome. Ideas:
 - Make OCR real (e.g., Tesseract.js) if currently mocked/simulated
 - Improve quiz difficulty adaptation and persistence
 - Add teacher/classroom dashboard features
-- Multi-language rule engine patterns
 - Pronunciation feedback using Web Audio API
 
 ---
